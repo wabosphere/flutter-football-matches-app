@@ -10,10 +10,12 @@ import 'generated/l10n/app_localizations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
+
   SystemChrome.setSystemUIOverlayStyle(AppTheme.systemUiOverlayStyle);
+  // Hide system UI (status bar & navigation bar) for full screen experience
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
   await di.init();
-  
+
   runApp(const MyApp());
 }
 

@@ -174,15 +174,47 @@
   "@yesterday": {
     "description": "Yesterday tab label"
   },
-  
+
   "today": "اليوم",
   "@today": {
     "description": "Today tab label"
   },
-  
+
   "tomorrow": "غداً",
   "@tomorrow": {
     "description": "Tomorrow tab label"
+  },
+
+  "dayAfterTomorrow": "بعد غداً",
+  "@dayAfterTomorrow": {
+    "description": "Day after tomorrow tab label"
+  },
+
+  "dayBeforeYesterday": "أول أمس",
+  "@dayBeforeYesterday": {
+    "description": "Day before yesterday tab label"
+  },
+
+  "daysInFuture": "بعد {count} أيام",
+  "@daysInFuture": {
+    "description": "Label for days in the future",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "5"
+      }
+    }
+  },
+
+  "daysInPast": "منذ {count} أيام",
+  "@daysInPast": {
+    "description": "Label for days in the past",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "2"
+      }
+    }
   },
   
   "noMatches": "لا توجد مباريات متاحة",

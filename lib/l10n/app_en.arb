@@ -174,15 +174,47 @@
   "@yesterday": {
     "description": "Yesterday tab label"
   },
-  
+
   "today": "Today",
   "@today": {
     "description": "Today tab label"
   },
-  
+
   "tomorrow": "Tomorrow",
   "@tomorrow": {
     "description": "Tomorrow tab label"
+  },
+
+  "dayAfterTomorrow": "Day After Tomorrow",
+  "@dayAfterTomorrow": {
+    "description": "Day after tomorrow tab label"
+  },
+
+  "dayBeforeYesterday": "Day Before Yesterday",
+  "@dayBeforeYesterday": {
+    "description": "Day before yesterday tab label"
+  },
+
+  "daysInFuture": "{count} days ahead",
+  "@daysInFuture": {
+    "description": "Label for days in the future",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "5"
+      }
+    }
+  },
+
+  "daysInPast": "{count} days ago",
+  "@daysInPast": {
+    "description": "Label for days in the past",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "2"
+      }
+    }
   },
   
   "noMatches": "No matches available",
