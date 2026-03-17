@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../features/matches/presentation/pages/matches_page.dart';
 import '../../features/matches/presentation/bloc/matches_bloc.dart';
+import '../../features/settings/presentation/pages/settings_page.dart';
 import '../di/injection_container.dart' as di;
 import 'app_routes.dart';
 import 'adaptive_scaffold.dart';
@@ -39,6 +40,11 @@ class AppRouter {
             path: AppRoutes.matches,
             name: AppRoutes.matchesName,
             builder: (context, state) => const MatchesPage(),
+          ),
+          GoRoute(
+            path: AppRoutes.settings,
+            name: AppRoutes.settingsName,
+            builder: (context, state) => const SettingsPage(),
           ),
         ],
       ),
@@ -80,7 +86,9 @@ class AppRouter {
 
   static void goToMatches() => _router.go(AppRoutes.matches);
 
-  static void goToMatchDetail(String matchId) => 
+  static void goToSettings() => _router.go(AppRoutes.settings);
+
+  static void goToMatchDetail(String matchId) =>
       _router.go('${AppRoutes.matches}/match/$matchId');
 
   static void goBack() {

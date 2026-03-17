@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'app_router.dart';
 
 class AdaptiveScaffold extends StatefulWidget {
   final Widget child;
@@ -19,6 +20,17 @@ class _AdaptiveScaffoldState extends State<AdaptiveScaffold> {
   int _selectedIndex = 0;
 
   @override
+  void initState() {
+    super.initState();
+    // Update selected index based on current path
+    if (widget.currentPath.contains('settings')) {
+      _selectedIndex = 2;
+    } else if (widget.currentPath.contains('matches')) {
+      _selectedIndex = 0;
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: widget.child
@@ -33,6 +45,7 @@ class _AdaptiveScaffoldState extends State<AdaptiveScaffold> {
           });
           switch (index) {
             case 0:
+              AppRouter.goToMatches();
               break;
             case 1:
               ScaffoldMessenger.of(context).showSnackBar(
@@ -40,9 +53,7 @@ class _AdaptiveScaffoldState extends State<AdaptiveScaffold> {
               );
               break;
             case 2:
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Settings coming soon')),
-              );
+              AppRouter.goToSettings();
               break;
           }
         },

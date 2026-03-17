@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'core/di/injection_container.dart' as di;
 import 'core/theme/app_theme.dart';
 import 'core/routing/app_router.dart';
+import 'core/constants/app_config.dart';
 import 'generated/l10n/app_localizations.dart';
 
 void main() async {
@@ -14,6 +15,10 @@ void main() async {
   SystemChrome.setSystemUIOverlayStyle(AppTheme.systemUiOverlayStyle);
   // Hide system UI (status bar & navigation bar) for full screen experience
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
+
+  // Initialize app configuration
+  await AppConfig.initialize();
+
   await di.init();
 
   runApp(const MyApp());
