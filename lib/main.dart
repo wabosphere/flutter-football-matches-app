@@ -12,9 +12,16 @@ import 'generated/l10n/app_localizations.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  SystemChrome.setSystemUIOverlayStyle(AppTheme.systemUiOverlayStyle);
-  // Hide system UI (status bar & navigation bar) for full screen experience
-  SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
+  // Set status bar to transparent with light icons
+  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+    statusBarColor: Colors.transparent,
+    statusBarIconBrightness: Brightness.light,
+    systemNavigationBarColor: Colors.transparent,
+    systemNavigationBarIconBrightness: Brightness.light,
+  ));
+
+  // Enable edge-to-edge display (keep status/nav bars visible but behind app)
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
 
   // Initialize app configuration
   await AppConfig.initialize();

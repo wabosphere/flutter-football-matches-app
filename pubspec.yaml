@@ -20,6 +20,8 @@ dependencies:
   cupertino_icons: ^1.0.8
   flutter_screenutil: ^5.9.3
   flutter_animate: ^4.5.0
+  elegant_nav_bar: ^1.0.9
+  stylish_bottom_bar: ^1.1.0
   
   # State Management
   flutter_bloc: ^8.1.6

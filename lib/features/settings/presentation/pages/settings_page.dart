@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tornet_task/generated/l10n/app_localizations.dart';
 import 'package:tornet_task/core/theme/theme_exports.dart';
 import 'package:tornet_task/core/constants/app_mode_provider.dart';
+import 'package:tornet_task/core/constants/navbar_style_provider.dart';
 import 'package:tornet_task/features/matches/presentation/bloc/matches_bloc.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -14,17 +15,29 @@ class SettingsPage extends StatefulWidget {
 
 class _SettingsPageState extends State<SettingsPage> {
   late Future<bool> _isDemoMode;
+  late Future<BottomNavStyle> _navStyle;
+  late Future<ElegantNavBarStyle> _elegantStyle;
+  late Future<StylishNavBarStyle> _stylishStyle;
 
   @override
   void initState() {
     super.initState();
     _isDemoMode = AppModeProvider.isDemoMode();
+    _navStyle = NavBarStyleProvider.getNavStyle();
+    _elegantStyle = NavBarStyleProvider.getElegantStyle();
+    _stylishStyle = NavBarStyleProvider.getStylishStyle();
+  }
+
+  void _updateNavBar() {
+    setState(() {
+      _navStyle = NavBarStyleProvider.getNavStyle();
+      _elegantStyle = NavBarStyleProvider.getElegantStyle();
+      _stylishStyle = NavBarStyleProvider.getStylishStyle();
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Settings'),
@@ -33,23 +46,24 @@ class _SettingsPageState extends State<SettingsPage> {
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          // App Mode Section
+          // Appearance Section
           SizedBox(
             height: 24,
             child: Text(
-              'App Mode',
+              'Appearance',
               style: AppTextStyles.headlineSmall,
             ),
           ),
           const SizedBox(height: 12),
-          FutureBuilder<bool>(
-            future: _isDemoMode,
+
+          // Bottom Navigation Bar Style
+          FutureBuilder<BottomNavStyle>(
+            future: _navStyle,
             builder: (context, snapshot) {
               if (!snapshot.hasData) {
                 return const Center(child: CircularProgressIndicator());
               }
-
-              final isDemo = snapshot.data ?? true;
+              final style = snapshot.data ?? BottomNavStyle.elegant;
 
               return Card(
                 margin: EdgeInsets.zero,
@@ -58,68 +72,153 @@ class _SettingsPageState extends State<SettingsPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                isDemo ? '🎮 DEMO MODE' : '🚀 LIVE MODE',
-                                style: AppTextStyles.titleLarge.copyWith(
-                                  color: isDemo
-                                      ? AppColors.accent
-                                      : AppColors.accent,
-                                ),
-                              ),
-                              const SizedBox(height: 4),
-                              Text(
-                                isDemo
-                                    ? 'Using mock data'
-                                    : 'Using real API data',
-                                style: AppTextStyles.bodySmall.copyWith(
-                                  color: AppColors.textSecondary,
-                                ),
-                              ),
-                            ],
-                          ),
-                          Switch(
-                            value: !isDemo,
-                            onChanged: (value) async {
-                              await AppModeProvider.setDemoMode(!value);
-                              setState(() {
-                                _isDemoMode =
-                                    AppModeProvider.isDemoMode();
-                              });
-
-                              // Reload matches
-                              if (mounted) {
-                                context.read<MatchesBloc>().add(
-                                      LoadTodayMatchesEvent(),
-                                    );
-                                context.read<MatchesBloc>().add(
-                                      LoadYesterdayMatchesEvent(),
-                                    );
-                                context.read<MatchesBloc>().add(
-                                      LoadTomorrowMatchesEvent(),
-                                    );
+                      Text(
+                        'Bottom Navigation Style',
+                        style: AppTextStyles.titleLarge,
+                      ),
+                      const SizedBox(height: 12),
+                      Wrap(
+                        spacing: 8,
+                        children: BottomNavStyle.values.map((s) {
+                          return ChoiceChip(
+                            label: Text(s == BottomNavStyle.elegant
+                                ? 'Elegant NavBar'
+                                : 'Stylish NavBar'),
+                            selected: style == s,
+                            onSelected: (selected) async {
+                              if (selected) {
+                                await NavBarStyleProvider.setNavStyle(s);
+                                _updateNavBar();
                               }
-
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(value
-                                      ? '🚀 Switched to LIVE mode'
-                                      : '🎮 Switched to DEMO mode'),
-                                  duration: const Duration(seconds: 2),
-                                ),
-                              );
                             },
-                          ),
-                        ],
+                          );
+                        }).toList(),
                       ),
                     ],
                   ),
                 ),
+              );
+            },
+          ),
+          const SizedBox(height: 16),
+
+          // Elegant NavBar Styles
+          FutureBuilder<BottomNavStyle>(
+            future: _navStyle,
+            builder: (context, snapshot) {
+              if (snapshot.data != BottomNavStyle.elegant) {
+                return const SizedBox.shrink();
+              }
+
+              return FutureBuilder<ElegantNavBarStyle>(
+                future: _elegantStyle,
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                  final style = snapshot.data ?? ElegantNavBarStyle.floating;
+
+                  return Card(
+                    margin: EdgeInsets.zero,
+                    child: Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'ElegantNavBar Style',
+                            style: AppTextStyles.titleLarge,
+                          ),
+                          const SizedBox(height: 12),
+                          Wrap(
+                            spacing: 8,
+                            children:
+                                ElegantNavBarStyle.values.map((s) {
+                              return ChoiceChip(
+                                label: Text(
+                                  s == ElegantNavBarStyle.simple
+                                      ? 'Simple'
+                                      : s == ElegantNavBarStyle.floating
+                                          ? 'Floating'
+                                          : 'Image',
+                                ),
+                                selected: style == s,
+                                onSelected: (selected) async {
+                                  if (selected) {
+                                    await NavBarStyleProvider
+                                        .setElegantStyle(s);
+                                    _updateNavBar();
+                                  }
+                                },
+                              );
+                            }).toList(),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              );
+            },
+          ),
+          const SizedBox(height: 16),
+
+          // Stylish NavBar Styles
+          FutureBuilder<BottomNavStyle>(
+            future: _navStyle,
+            builder: (context, snapshot) {
+              if (snapshot.data != BottomNavStyle.stylish) {
+                return const SizedBox.shrink();
+              }
+
+              return FutureBuilder<StylishNavBarStyle>(
+                future: _stylishStyle,
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                  final style =
+                      snapshot.data ?? StylishNavBarStyle.style1;
+
+                  return Card(
+                    margin: EdgeInsets.zero,
+                    child: Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'StylishBottomBar Style',
+                            style: AppTextStyles.titleLarge,
+                          ),
+                          const SizedBox(height: 12),
+                          Wrap(
+                            spacing: 8,
+                            children: StylishNavBarStyle.values
+                                .map(
+                                  (s) =>
+                                      ChoiceChip(
+                                        label: Text(
+                                            'Style ${s.index + 1}'),
+                                        selected: style == s,
+                                        onSelected:
+                                            (selected) async {
+                                          if (selected) {
+                                            await NavBarStyleProvider
+                                                .setStylishStyle(
+                                                    s);
+                                            _updateNavBar();
+                                          }
+                                        },
+                                      ),
+                                )
+                                .toList(),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
               );
             },
           ),
