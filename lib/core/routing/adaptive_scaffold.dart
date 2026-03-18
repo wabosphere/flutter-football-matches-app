@@ -3,7 +3,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:elegant_nav_bar/elegant_nav_bar.dart';
 import 'package:stylish_bottom_bar/stylish_bottom_bar.dart';
 import 'app_router.dart';
-import '../../core/constants/navbar_style_provider.dart';
+import '../constants/navbar_style_provider.dart';
 
 class AdaptiveScaffold extends StatefulWidget {
   final Widget child;
